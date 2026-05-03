@@ -6,7 +6,7 @@
 
 ## 1. Project Overview
 
-This project investigates whether ESG (Environmental, Social, and Governance) equity investments deliver superior **risk-adjusted** performance compared to traditional broad-market portfolios. The analysis uses daily price data on six Exchange-Traded Funds (ETFs) — three ESG-focused and three traditional — together with the Fama–French research factors, to estimate returns, volatility, Sharpe ratios, CAPM alphas and betas, and Fama–French three-factor alphas.
+This project investigates whether ESG (Environmental, Social, and Governance) equity investments deliver superior risk-adjusted performance relative to traditional broad-market portfolios. The analysis uses daily price data on six Exchange-Traded Funds (ETFs), three ESG-focused and three traditional, together with the Fama–French research factors, to estimate returns, volatility, Sharpe ratios, CAPM alphas and betas, and Fama–French three-factor alphas.
 I chose ETFs rather than individual stocks to keep the comparison clean and avoid stock-picking bias.
 The deliverable is a data-driven blog post (`notebooks/blog.ipynb`) targeted at a financially literate but non-technical reader.
 
@@ -14,9 +14,9 @@ The deliverable is a data-driven blog post (`notebooks/blog.ipynb`) targeted at 
 
 > **Do ESG-focused equity ETFs outperform traditional broad-market ETFs on a risk-adjusted basis once exposure to common systematic risk factors is taken into account?**
 
-We answer this in three layers of increasing rigour:
+We answer this in three layers of increasing rigor:
 
-1. Raw cumulative returns and annualised volatility.
+1. Raw cumulative returns and annualized volatility.
 2. The **Sharpe ratio** (excess return per unit of total risk).
 3. **CAPM** and **Fama–French three-factor** regressions, recovering the alpha — the portion of return that is *not* explained by market exposure or by the size and value factors.
 
@@ -31,7 +31,7 @@ One practical challenge was aligning ETF returns with the Fama–French factors,
 | Yahoo Finance (via `yfinance`) | Daily adjusted close prices for 6 ETFs | Yahoo |
 | Kenneth French Data Library | Fama–French 3 factors + risk-free rate (daily, US) | Dartmouth (`pandas_datareader`) |
 
-**ETFs analysed:**
+**ETFs analyzed:**
 
 - *ESG basket*: `ESGU` (iShares ESG Aware MSCI USA), `SUSA` (iShares MSCI USA ESG Select), `ICLN` (iShares Global Clean Energy)
 - *Traditional basket*: `SPY` (S&P 500), `VTI` (Vanguard Total Stock Market), `DIA` (Dow Jones Industrial Average)
@@ -92,7 +92,7 @@ python scripts/analysis.py        # Produces tables in outputs/
 python scripts/plots.py           # Produces figures in plots/
 
 # 5. Open the blog post
-jupyter notebook notebooks/blog.ipynb
+Jupyter notebook notebooks/blog.ipynb
 ```
 
 Each script can also be run from inside the notebook — see the first code cell of `blog.ipynb`.
