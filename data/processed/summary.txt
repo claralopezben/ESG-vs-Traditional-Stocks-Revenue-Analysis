@@ -1,0 +1,13 @@
+Cleaned dataset summary
+-----------------------
+Date range : 2019-01-03 -> 2025-12-30
+Trading days: 1,758
+Tickers     : ['ESGU', 'SUSA', 'ICLN', 'SPY', 'VTI', 'DIA']
+
+Per-ticker first valid observation:
+  ESGU   -> 2019-01-02
+  SUSA   -> 2019-01-02
+  ICLN   -> 2019-01-02
+  SPY    -> 2019-01-02
+  VTI    -> 2019-01-02
+  DIA    -> 2019-01-02

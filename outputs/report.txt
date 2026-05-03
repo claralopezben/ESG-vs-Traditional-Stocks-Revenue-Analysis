@@ -1,0 +1,48 @@
+======================================================================
+ESG vs TRADITIONAL ETFs - ANALYSIS REPORT
+======================================================================
+
+[1] DESCRIPTIVE STATISTICS (annualised)
+
+              Group Ann. Return Ann. Volatility   Sharpe Sharpe 95% CI low Sharpe 95% CI high
+Ticker                                                                                       
+ESGU            ESG      17.89%          20.20%    0.748             0.007              1.494
+SUSA            ESG      17.74%          19.97%    0.749            -0.001              1.484
+ICLN            ESG      15.55%          29.91%    0.427            -0.335              1.163
+SPY     Traditional      17.97%          19.78%    0.767             0.026              1.514
+VTI     Traditional      17.54%          20.25%    0.729            -0.015              1.475
+DIA     Traditional      14.19%          19.16%    0.595            -0.137              1.336
+
+
+[2] BASKET-LEVEL T-TEST
+  H0: mean(ESG_basket - Traditional_basket) = 0
+  N daily obs       : 1,758
+  Mean diff (daily) :   0.196 bps
+  Mean diff (annual):   0.493 pp
+  t-statistic       :   0.159
+  p-value           :  0.8736
+
+[3] CAPM (r_i - r_f = alpha + beta * Mkt-RF)
+
+              Group  alpha_ann_bps  alpha_p   beta  beta_p  R_squared     N
+Ticker                                                                     
+ESGU            ESG            8.5   0.8819  0.982     0.0      0.990  1758
+SUSA            ESG           19.9   0.8445  0.964     0.0      0.978  1758
+ICLN            ESG         -221.3   0.7990  0.979     0.0      0.449  1758
+SPY     Traditional           47.5   0.4774  0.961     0.0      0.990  1758
+VTI     Traditional          -34.6   0.3129  0.987     0.0      0.996  1758
+DIA     Traditional         -202.8   0.4230  0.878     0.0      0.880  1758
+
+
+[4] FAMA-FRENCH 3-FACTOR
+
+              Group  alpha_ann_bps  alpha_p  beta_MKT  beta_SMB  beta_HML  R_squared     N
+Ticker                                                                                    
+ESGU            ESG          -39.2    0.365     0.995    -0.097    -0.001      0.993  1758
+SUSA            ESG           -6.7    0.947     0.972    -0.054    -0.002      0.979  1758
+ICLN            ESG           79.7    0.924     0.885     0.605    -0.103      0.502  1758
+SPY     Traditional          -10.2    0.823     0.979    -0.116     0.020      0.994  1758
+VTI     Traditional          -39.0    0.197     0.990    -0.007     0.027      0.997  1758
+DIA     Traditional         -265.1    0.176     0.912    -0.113     0.252      0.929  1758
+
+======================================================================
