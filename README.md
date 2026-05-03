@@ -103,7 +103,7 @@ Each script can also be run from inside the notebook — see the first code cell
 - Yahoo Finance occasionally back-fills or revises adjusted-close prices. The scripts therefore cache the raw download in `data/raw/`; delete that folder to force a fresh pull.
 - The Fama–French factors are versioned by Kenneth French; the cleaning script records the download date in a header comment of `data/raw/ff_factors_meta.txt`.
 
-## 6. Methods at a Glance
+## 6. Methods & Formulas used 
 
 - **Returns**: simple daily returns from adjusted close, $r_t = P_t / P_{t-1} - 1$.
 - **Annualisation**: $\sigma_{\text{ann}} = \sigma_{\text{daily}} \sqrt{252}$, $\mu_{\text{ann}} = \mu_{\text{daily}} \times 252$.
@@ -128,7 +128,7 @@ scipy>=1.11
 jupyter
 ```
 
-## 8. Author & Acknowledgements
+## 8. Author
 
 
 Clara Ofelia Lopez, BEE2041 Data Science in Economics, University of Exeter, 2026
