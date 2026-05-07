@@ -1,20 +1,11 @@
 """
 analysis.py
------------
-Core statistical work:
 
- 1. Descriptive stats per ETF: annualised return, volatility, Sharpe.
- 2. Bootstrap 95% confidence interval on each Sharpe ratio.
- 3. Two-sample t-test on the daily return differential between
-    the equally-weighted ESG and traditional baskets.
- 4. CAPM regression for every ETF (vs. Mkt-RF), with HAC standard errors.
- 5. Fama-French 3-factor regression for every ETF, with HAC standard errors.
-
-All numerical results land in outputs/ as CSV (for re-use by the notebook)
-plus a human-readable TXT report.
-
-Run:
-    python scripts/analysis.py
+This script runs the main statistical analysis for the project.
+It calculates returns, volatility and Sharpe ratios for each ETF,
+runs a t-test comparing the ESG and traditional baskets, and fits
+CAPM and Fama-French three-factor regressions with robust standard errors.
+Results are saved to the outputs folder as CSV files and a text report.
 """
 from __future__ import annotations
 
@@ -29,9 +20,8 @@ from config import (ESG_TICKERS, NEWEY_LAGS, OUTPUTS_DIR, PROCESSED_DIR,
                     RANDOM_SEED, TRADING_DAYS, TRADITIONAL_TICKERS)
 
 
-# --------------------------------------------------------------------------
-# Helpers
-# --------------------------------------------------------------------------
+# Helper functions
+
 def annualise_mean(daily: pd.Series) -> float:
     return daily.mean() * TRADING_DAYS
 
@@ -69,9 +59,9 @@ def bootstrap_sharpe_ci(excess_daily: pd.Series,
     return tuple(np.quantile(sharpes, [alpha / 2, 1 - alpha / 2]))
 
 
-# --------------------------------------------------------------------------
+
 # 1. Descriptive table
-# --------------------------------------------------------------------------
+
 def descriptive_table(returns: pd.DataFrame,
                       excess: pd.DataFrame) -> pd.DataFrame:
     rows = []
@@ -90,9 +80,9 @@ def descriptive_table(returns: pd.DataFrame,
     return pd.DataFrame(rows).set_index("Ticker")
 
 
-# --------------------------------------------------------------------------
+
 # 2. Basket-level t-test on daily returns
-# --------------------------------------------------------------------------
+
 def basket_ttest(returns: pd.DataFrame) -> dict:
     """Equally-weighted ESG basket vs equally-weighted traditional basket.
 
@@ -117,9 +107,9 @@ def basket_ttest(returns: pd.DataFrame) -> dict:
     }
 
 
-# --------------------------------------------------------------------------
+
 # 3 & 4. CAPM and Fama-French regressions
-# --------------------------------------------------------------------------
+
 def run_factor_regression(y: pd.Series,
                           X: pd.DataFrame) -> dict:
     """OLS with Newey-West HAC standard errors. Returns a flat dict of
@@ -191,9 +181,8 @@ def ff3_table(excess: pd.DataFrame, factors: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows).set_index("Ticker")
 
 
-# --------------------------------------------------------------------------
 # Reporting
-# --------------------------------------------------------------------------
+
 def write_report(desc: pd.DataFrame, ttest: dict,
                  capm: pd.DataFrame, ff3: pd.DataFrame) -> str:
     def fmt_pct(x):  return f"{x*100:6.2f}%"
@@ -240,9 +229,9 @@ def write_report(desc: pd.DataFrame, ttest: dict,
     return "\n".join(lines)
 
 
-# --------------------------------------------------------------------------
 # Main
-# --------------------------------------------------------------------------
+
+
 def main() -> None:
     print("=== analysis.py ===")
     returns = pd.read_csv(PROCESSED_DIR / "returns.csv",

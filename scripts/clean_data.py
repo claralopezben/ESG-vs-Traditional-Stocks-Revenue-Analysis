@@ -1,18 +1,9 @@
 """
 clean_data.py
--------------
-Take the raw price + factor CSVs from data/raw/, align them on a common
-trading-day index, drop missing rows, compute simple daily returns, and
-write tidy outputs to data/processed/.
 
-Outputs:
-    data/processed/prices.csv         <- aligned adjusted-close prices
-    data/processed/returns.csv        <- daily simple returns per ETF
-    data/processed/factors.csv        <- aligned FF factors + RF rate
-    data/processed/excess_returns.csv <- ETF returns minus daily RF rate
-
-Run:
-    python scripts/clean_data.py
+This script takes the raw price and factor data from data/raw/, lines them
+up on a common set of trading dates, removes any missing values, calculates
+daily returns, and saves everything to data/processed/ ready for analysis.
 """
 from __future__ import annotations
 
@@ -27,7 +18,6 @@ from config import ALL_TICKERS, PROCESSED_DIR, RAW_DIR
 
 
 def load_raw() -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Load the two raw CSVs as DataFrames with a parsed Date index."""
     prices = pd.read_csv(RAW_DIR / "prices.csv",
                          parse_dates=["Date"], index_col="Date")
     factors = pd.read_csv(RAW_DIR / "ff_factors.csv",
@@ -37,13 +27,8 @@ def load_raw() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 def align_and_clean(prices: pd.DataFrame,
                     factors: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Inner-join prices and factors on the date index, drop NA rows.
-
-    Why inner-join? Yahoo and Kenneth French use slightly different US
-    trading-day calendars in edge cases (e.g. half-days), so taking the
-    intersection guarantees every row in our processed dataset has a
-    complete observation for every ticker AND every factor.
-    """
+    # Yahoo Finance and Kenneth French use slightly different trading calendars
+    # so we keep only the dates that appear in both datasets
     common_idx = prices.index.intersection(factors.index)
     prices_aligned  = prices.loc[common_idx].dropna(how="any")
     factors_aligned = factors.loc[prices_aligned.index]
@@ -51,27 +36,20 @@ def align_and_clean(prices: pd.DataFrame,
 
 
 def compute_returns(prices: pd.DataFrame) -> pd.DataFrame:
-    """Daily simple returns: r_t = P_t / P_{t-1} - 1.
-
-    The first row is NaN by construction; we drop it.
-    """
+    # Simple daily return: today's price divided by yesterday's minus one
     returns = prices.pct_change().dropna(how="any")
     return returns
 
 
 def compute_excess_returns(returns: pd.DataFrame,
                            factors: pd.DataFrame) -> pd.DataFrame:
-    """Return r_i - r_f for every ticker, indexed by date.
-
-    The Fama-French RF rate is already a daily decimal at this point.
-    """
+    # Subtract the daily risk-free rate from each ETF's return
     rf = factors["RF"].reindex(returns.index)
     excess = returns.sub(rf, axis=0)
     return excess
 
 
 def summarise_coverage(prices: pd.DataFrame, returns: pd.DataFrame) -> str:
-    """Human-readable diagnostic string written next to the processed data."""
     lines = [
         "Cleaned dataset summary",
         "-----------------------",
@@ -97,7 +75,6 @@ def main() -> None:
     prices, factors = align_and_clean(prices, factors)
     print(f"  aligned    : {prices.shape}")
 
-    # Sanity check: every expected ticker should be present.
     missing = set(ALL_TICKERS) - set(prices.columns)
     if missing:
         raise RuntimeError(f"Missing tickers in price data: {missing}")
@@ -105,7 +82,6 @@ def main() -> None:
     returns = compute_returns(prices)
     excess  = compute_excess_returns(returns, factors)
 
-    # Persist
     prices.to_csv(PROCESSED_DIR  / "prices.csv")
     returns.to_csv(PROCESSED_DIR / "returns.csv")
     factors.to_csv(PROCESSED_DIR / "factors.csv")
